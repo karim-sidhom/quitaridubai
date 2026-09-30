@@ -1416,9 +1416,11 @@ function norm(s){return String(s||"").toLowerCase().replace(/[^a-z0-9\u0600-\u06
 function url(u){u=String(u||"").split(";")[0].trim();if(!u)return "";if(!/^https?:\/\//i.test(u))u="https://"+u;return u}
 async function fetchOv(q){for(var i=0;i<OVP.length;i++){try{var r=await fetch(OVP[i],{method:"POST",body:"data="+encodeURIComponent(q)});if(!r.ok)continue;var j=await r.json();if(j&&j.elements)return j.elements}catch(e){}}throw 0}
 function paint(root,res){var L=WL[(typeof LANG!=="undefined"&&LANG)||"fr"]||WL.fr;
- Array.prototype.forEach.call(root.querySelectorAll(".svl li[data-svc]"),function(li){var u=res[li.getAttribute("data-svc")];if(!u||li.querySelector(".sweb"))return;
+ Array.prototype.forEach.call(root.querySelectorAll(".svl li[data-svc]"),function(li){var u=res[li.getAttribute("data-svc")];
+  var nm=li.getAttribute("data-n");if(!u&&nm)u="https://duckduckgo.com/?q="+encodeURIComponent("!ducky "+nm+" Dubai official website");if(!u)return;
+  var ex=li.querySelector(".sweb");if(ex){ex.href=u;return}
   var sx=li.querySelector(".sx");if(!sx)return;var a=document.createElement("a");a.className="sg sweb";a.href=u;a.target="_blank";a.rel="noopener";a.textContent=L;sx.appendChild(a)})}
-window.__svWeb=async function(root,station){if(!root)return;var key=String(station);
+window.__svWeb=async function(root,station){if(!root)return;var key=String(station);paint(root,{});
  if(mem[key]){paint(root,mem[key]);return}
  var lis=Array.prototype.filter.call(root.querySelectorAll(".svl li[data-g]"),function(li){return li.getAttribute("data-g")});if(!lis.length)return;
  var q="[out:json][timeout:20];(";lis.forEach(function(li){q+='nwr[~"^(website|contact:website)$"~"."](around:40,'+li.getAttribute("data-g")+');'});q+=");out tags center;";
