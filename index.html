@@ -1467,7 +1467,27 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
   var mem={};try{mem=JSON.parse(localStorage.getItem("tmenuC3")||"{}")||{}}catch(e){}
   function save(){var k={};for(var q in mem)if(mem[q])k[q]=mem[q];try{localStorage.setItem("tmenuC3",JSON.stringify(k))}catch(e){}} /* seuls les menus trouvés sont gardés d'une visite à l'autre */
   var queue=[],busy=0,MAX=3,wait={};
-  function apply(a,site){if(site){a.href=site;a.style.display=""}else{a.style.display="none"}}
+  function apply(a,site){if(site){a.href=site;a.style.display="";frhMenuRead(a,site)}else{a.style.display="none"}}
+  /* Farhoum lit les menus des restaurants de son programme, un par un, et les garde pour décider plus tard */
+  var FM={};try{FM=JSON.parse(localStorage.getItem("frhMenus1")||"{}")||{}}catch(e){}
+  var fq=[],fbusy=false,fqs={};
+  function fsave(){try{localStorage.setItem("frhMenus1",JSON.stringify(FM))}catch(e){}}
+  function nameOf(a){return (a.__q||"").replace(/^site:talabat\.com\s+/i,"").replace(/\s+Dubai$/i,"").trim()}
+  function frhMenuRead(a,site){
+    if(!a.closest||!a.closest("#frhOut"))return; /* seulement le programme de Farhoum */
+    if(!/\/uae\/restaurant\/\d+\//i.test(site))return;
+    var n=nameOf(a);if(!n||fqs[n])return;
+    var c=FM[n];if(c&&c.branch===site&&c.items&&c.items.length&&Date.now()-c.at<864e5)return; /* déjà lu il y a moins de 24 h */
+    fqs[n]=1;fq.push({n:n,site:site});fnext();
+  }
+  function fnext(){
+    if(fbusy||!fq.length)return;fbusy=true;var t=fq.shift();
+    fetch(W+"?menu="+encodeURIComponent(t.site)).then(function(r){return r.json()}).then(function(j){
+      if(j&&j.items&&j.items.length){FM[t.n]={branch:t.site,at:Date.now(),items:j.items};fsave()}
+    }).catch(function(){}).then(function(){delete fqs[t.n];fbusy=false;fnext()});
+  }
+  window.__frhMenus=function(){return FM};
+  window.__frhMenuOf=function(n){return FM[n]||null};
   function qOf(a){try{return new URL(a.href).searchParams.get("q")||""}catch(e){return ""}}
   function next(){
     while(busy<MAX&&queue.length){
@@ -1480,7 +1500,7 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
     }
   }
   function handle(a){
-    if(a.__tm)return;a.__tm=1;var q=qOf(a);if(!q){a.style.display="";return}
+    if(a.__tm)return;a.__tm=1;var q=qOf(a);a.__q=q;if(!q){a.style.display="";return}
     if(q in mem){apply(a,mem[q]);return}
     if(wait[q]){wait[q].push(a);return}
     wait[q]=[a];queue.push(q);next();
