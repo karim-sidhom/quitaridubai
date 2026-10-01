@@ -1463,8 +1463,9 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
 /* ===== Bouton « Voir le menu » : affiché seulement si le worker trouve une page menu ===== */
 (function(){
   var W="https://ducky.lordsidhom78.workers.dev/";
-  var mem={};try{mem=JSON.parse(localStorage.getItem("tmenuC1")||"{}")||{}}catch(e){}
-  function save(){var k={};for(var q in mem)if(mem[q])k[q]=mem[q];try{localStorage.setItem("tmenuC1",JSON.stringify(k))}catch(e){}} /* seuls les menus trouvés sont gardés d'une visite à l'autre */
+  try{localStorage.removeItem("tmenuC1");localStorage.removeItem("tmenuC2")}catch(e){} /* anciennes mémoires (mauvais liens / pages Talabat sans menu) */
+  var mem={};try{mem=JSON.parse(localStorage.getItem("tmenuC3")||"{}")||{}}catch(e){}
+  function save(){var k={};for(var q in mem)if(mem[q])k[q]=mem[q];try{localStorage.setItem("tmenuC3",JSON.stringify(k))}catch(e){}} /* seuls les menus trouvés sont gardés d'une visite à l'autre */
   var queue=[],busy=0,MAX=3,wait={};
   function apply(a,site){if(site){a.href=site;a.style.display=""}else{a.style.display="none"}}
   function qOf(a){try{return new URL(a.href).searchParams.get("q")||""}catch(e){return ""}}
