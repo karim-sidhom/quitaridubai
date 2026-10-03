@@ -745,15 +745,15 @@ window.FRH_PREF=window.FRH_PREF||{on:false,prof:"omni",opt:{},min:"",max:""};
 var FRH_PT={fr:{t:"🧞 Farhoum choisit les plats",h1:"Profil :",h2:"Allergies et intolérances :",h3:"Sel et sucre :",h4:"Saveur ou portion :",h5:"Prix (AED) :",mn:"min",mx:"max",
  p:{omni:"Omnivore / Classique",vege:"Végétarien",pesc:"Pescétarien",vegan:"Végan (100 % végétal)",flex:"Flexitarien"},
  o:{gluten:"Sans gluten",lact:"Sans lactose",nuts:"Sans fruits à coque / arachides",salt:"Hyposodé / pauvre en sel",sugar:"Sans sucre ajouté / pauvre en sucre",big:"Copieux / généreux",sweetsalt:"Salé-sucré"},
- warn:"⚠️ à confirmer avec le restaurant",none:"🧞 Aucun plat ne correspond à tes choix"},
+ warn:"ℹ️ À demander au restaurant lors de la commande : ",wk:{gluten:"sans gluten",lact:"sans lactose",nuts:"sans fruits à coque ni arachides",salt:"peu de sel",sugar:"sans sucre ajouté"},none:"🧞 Aucun plat ne correspond à tes choix"},
  en:{t:"🧞 Farhoum picks the dishes",h1:"Profile:",h2:"Allergies & intolerances:",h3:"Salt & sugar:",h4:"Flavour or portion:",h5:"Price (AED):",mn:"min",mx:"max",
  p:{omni:"Omnivore / Classic",vege:"Vegetarian",pesc:"Pescatarian",vegan:"Vegan (100% plant-based)",flex:"Flexitarian"},
  o:{gluten:"Gluten-free",lact:"Lactose-free",nuts:"No tree nuts / peanuts",salt:"Low-sodium / low-salt",sugar:"No added sugar / low-sugar",big:"Hearty / generous",sweetsalt:"Sweet & savoury"},
- warn:"⚠️ to be confirmed with the restaurant",none:"🧞 No dish matches your choices"},
+ warn:"ℹ️ Ask the restaurant when ordering: ",wk:{gluten:"gluten-free",lact:"lactose-free",nuts:"no tree nuts or peanuts",salt:"low salt",sugar:"no added sugar"},none:"🧞 No dish matches your choices"},
  ar:{t:"🧞 فرحوم يختار الأطباق",h1:"الملف:",h2:"الحساسية وعدم التحمّل:",h3:"الملح والسكر:",h4:"النكهة أو الحصة:",h5:"السعر (درهم):",mn:"من",mx:"إلى",
  p:{omni:"آكل كل شيء / كلاسيكي",vege:"نباتي",pesc:"نباتي يأكل السمك",vegan:"نباتي صرف (100% نباتي)",flex:"مرن (نباتي غالبًا)"},
  o:{gluten:"خالٍ من الغلوتين",lact:"خالٍ من اللاكتوز",nuts:"بدون مكسرات / فول سوداني",salt:"قليل الملح",sugar:"بدون سكر مضاف / قليل السكر",big:"وفير / مُشبِع",sweetsalt:"مالح-حلو"},
- warn:"⚠️ يُرجى التأكد من المطعم",none:"🧞 لا يوجد طبق يطابق اختياراتك"}};
+ warn:"ℹ️ عند الطلب، يُرجى إعلام المطعم بأنك تريد الطبق: ",wk:{gluten:"خالٍ من الغلوتين",lact:"خالٍ من اللاكتوز",nuts:"بدون مكسرات أو فول سوداني",salt:"قليل الملح",sugar:"بدون سكر مضاف"},none:"🧞 لا يوجد طبق يطابق اختياراتك"}};
 function frhPrefHTML(){var P=window.FRH_PREF,q=FRH_PT[LANG]||FRH_PT.fr;
  function cb(k){return '<label class="frac"><input type="checkbox" class="frpo" data-k="'+k+'"'+(P.opt[k]?" checked":"")+'> <span class="frat">'+q.o[k]+'</span></label>'}
  function hd(t){return '<b style="display:block;grid-column:1/-1;margin-top:6px;font-size:.82rem;color:#ffd700">'+t+'</b>'}
@@ -1578,7 +1578,8 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
     sp.textContent="";sp.classList.toggle("frpn",!b);
     if(b){var g=document.createElement("span");g.className="frpg";g.textContent="🧞";var nm=document.createElement("b");nm.className="frpd";nm.textContent=(LANG==="ar"&&b.it.nameAr)||itN(b.it);var pz=document.createElement("span");pz.className="frpp";pz.textContent=ps;sp.appendChild(g);sp.appendChild(nm);sp.appendChild(pz)}
     else sp.textContent=q.none;
-    if(b&&(o.gluten||o.lact||o.nuts||o.salt||o.sugar)){var w=document.createElement("span");w.style.cssText="display:block;color:#ffb347";w.textContent=q.warn;sp.appendChild(w)}}
+    /* message « à demander au restaurant » retiré de l'affichage : Farhoum transmettra lui-même ces critères en commandant (textes gardés dans FRH_PT.warn / FRH_PT.wk) */
+    if(false&&b&&(o.gluten||o.lact||o.nuts||o.salt||o.sugar)){var w=document.createElement("span");w.style.cssText="display:block;color:#ffe9a8";w.textContent=q.warn+["gluten","lact","nuts","salt","sugar"].filter(function(k){return o[k]}).map(function(k){return (q.wk&&q.wk[k])||k}).join(" · ");sp.appendChild(w)}}
   window.__frhDishAll=function(){Array.prototype.forEach.call(document.querySelectorAll("#frhOut a.tmenu"),function(a){frhDish(a);frhPref(a)})};
   window.__frhMenus=function(){return FM};
   window.__frhMenuOf=function(n){return FM[n]||null};
@@ -1602,6 +1603,52 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
   function scan(root){if(root&&root.querySelectorAll)Array.prototype.forEach.call(root.querySelectorAll("a.tmenu"),handle)}
   scan(document);
   new MutationObserver(function(ms){ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,function(n){if(n.nodeType===1){if(n.matches&&n.matches("a.tmenu"))handle(n);scan(n)}})})}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+<style>
+/* ===== Farhoum commande par WhatsApp (modèle SODELEC) ===== */
+#frhCmdW{margin:10px 0 4px}
+#frhCmd{display:block;width:100%;padding:12px 14px;border:1.5px solid #ffd700;border-radius:14px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+#frhCmdM{display:none;margin-top:6px;padding:8px 10px;border-radius:10px;background:#b3261e;color:#fff;font-size:.9rem}
+</style>
+<script>
+/* ===== Farhoum commande seul : tous les plats du programme en une seule commande WhatsApp (modèle SODELEC) ===== */
+(function(){
+var TEL="21653906104"; /* restaurant de test : 53906104 (Tunisie, +216) */
+var T={fr:{b:"🧞 Farhoum commande tous les plats",wo:"Nouvelle commande Farhoum",onum:"N° commande",odat:"Date",tot:"Total",e1:"🧞 Aucun plat choisi pour l'instant dans le programme.",ok:"🧞 Farhoum a envoyé la commande par WhatsApp."},
+ en:{b:"🧞 Farhoum orders all the dishes",wo:"New Farhoum order",onum:"Order no.",odat:"Date",tot:"Total",e1:"🧞 No dish chosen in the programme yet.",ok:"🧞 Farhoum sent the order via WhatsApp."},
+ ar:{b:"🧞 فرحوم يطلب كل الأطباق",wo:"طلب جديد من فرحوم",onum:"رقم الطلب",odat:"التاريخ",tot:"المجموع",e1:"🧞 لا يوجد أي طبق مختار في البرنامج بعد.",ok:"🧞 أرسل فرحوم الطلب عبر واتساب."}};
+function q(){return T[(typeof LANG!=="undefined"&&LANG)||"fr"]||T.fr}
+function od(now){now=now||new Date();var g={};new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Dubai",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(now).forEach(function(x){g[x.type]=x.value});
+ return {date:g.day+"/"+g.month+"/"+g.year+" "+g.hour+":"+g.minute,code:g.day+g.month+String(g.year).slice(2)+"-"+g.hour+g.minute}}
+function num(s){var m=String(s||"").replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:0}
+function collect(){var o=document.getElementById("frhOut"),out=[],s=0;if(!o)return {d:out,s:0};
+ Array.prototype.forEach.call(o.querySelectorAll("details.frd"),function(dt){var sm=dt.querySelector("summary"),day=sm?sm.textContent.replace(/\s+/g," ").trim():"",rows=[];
+  Array.prototype.forEach.call(dt.querySelectorAll("li"),function(li){var a=li.querySelector("a.tmenu");if(!a)return;
+   var w=li.querySelector("a.frweb"),rest=w?w.getAttribute("data-n"):"",lab=li.querySelector(".frx>b"),meal=lab?lab.textContent.trim():"",dish="",price="";
+   var p=li.querySelector(".frpref:not(.frpn)");
+   if(p&&p.querySelector(".frpd")){dish=p.querySelector(".frpd").textContent.trim();price=(p.querySelector(".frpp")||{}).textContent||""}
+   else{var c=li.querySelector(".frdish");if(c){var tx=c.textContent.replace(/^🍛\s*/,""),i=tx.lastIndexOf(" — ");if(i>0){dish=tx.slice(0,i).trim();price=tx.slice(i+3).trim()}}}
+   if(!dish)return;s+=num(price);rows.push("- 1 × "+dish+" — "+price.trim()+" ("+meal+(rest?" · "+rest:"")+")")});
+  if(rows.length)out.push({day:day,rows:rows})});
+ return {d:out,s:s}}
+function crit(){var P=window.FRH_PREF,Q=(typeof FRH_PT!=="undefined"&&(FRH_PT[LANG]||FRH_PT.fr))||null;if(!P||!P.on||!Q||!Q.warn)return "";var o=P.opt||{};
+ var k=["gluten","lact","nuts","salt","sugar"].filter(function(x){return o[x]});return k.length?Q.warn+k.map(function(x){return (Q.wk&&Q.wk[x])||x}).join(" · "):""}
+function order(){var L=q(),m=document.getElementById("frhCmdM");m.style.display="block";m.style.background="#b3261e";
+ var r=collect();if(!r.d.length){m.textContent=L.e1;return}
+ var o=od(),w=["*"+L.wo+"*",L.onum+" : FRH-"+o.code,L.odat+" : "+o.date,""];
+ r.d.forEach(function(x){w.push("*"+x.day+"*");x.rows.forEach(function(l){w.push(l)});w.push("")});
+ var c=crit();if(c){w.push(c);w.push("")}
+ w.push(L.tot+" : "+(Math.round(r.s*100)/100)+" AED");
+ var u="https://wa.me/"+TEL+"?text="+encodeURIComponent(w.join("\n"));if(!window.open(u,"_blank"))location.href=u;
+ m.style.background="#128c7e";m.textContent=L.ok}
+function init(){var o=document.getElementById("frhOut");if(!o||document.getElementById("frhCmdW"))return;
+ var d=document.createElement("div");d.id="frhCmdW";d.hidden=true;d.innerHTML='<button type="button" id="frhCmd"></button><div id="frhCmdM"></div>';o.parentNode.insertBefore(d,o.nextSibling);
+ var b=document.getElementById("frhCmd");b.onclick=order;
+ function upd(){b.textContent=q().b;d.hidden=!o.querySelector("details.frd")}
+ upd();new MutationObserver(upd).observe(o,{childList:true});
+ new MutationObserver(function(){b.textContent=q().b}).observe(document.documentElement,{attributes:true,attributeFilter:["lang","dir"]})}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script>
 </body>
