@@ -1643,9 +1643,9 @@ function order(){var L=q(),m=document.getElementById("frhCmdM");m.style.display=
  var u="https://wa.me/"+TEL+"?text="+encodeURIComponent(w.join("\n"));if(!window.open(u,"_blank"))location.href=u;
  m.style.background="#128c7e";m.textContent=L.ok}
 function init(){var o=document.getElementById("frhOut");if(!o||document.getElementById("frhCmdW"))return;
- var d=document.createElement("div");d.id="frhCmdW";d.hidden=true;d.innerHTML='<button type="button" id="frhCmd"></button><div id="frhCmdM"></div>';o.parentNode.insertBefore(d,o.nextSibling);
+ var d=document.createElement("div");d.id="frhCmdW";d.innerHTML='<button type="button" id="frhCmd"></button><div id="frhCmdM"></div>';o.parentNode.insertBefore(d,o.nextSibling);
  var b=document.getElementById("frhCmd");b.onclick=order;
- function upd(){b.textContent=q().b;d.hidden=!o.querySelector("details.frd")}
+ function upd(){b.textContent=q().b}
  upd();new MutationObserver(upd).observe(o,{childList:true});
  new MutationObserver(function(){b.textContent=q().b}).observe(document.documentElement,{attributes:true,attributeFilter:["lang","dir"]})}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
