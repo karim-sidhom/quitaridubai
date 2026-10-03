@@ -1644,10 +1644,14 @@ function collect(){var o=document.getElementById("frhOut"),out=[];if(!o)return o
    var mk="lunch";if(typeof FRT!=="undefined")["fr","en","ar"].forEach(function(l){if(FRT[l]&&meal===FRT[l].dinner)mk="dinner"});if(dish)out.push({rest:rest,meal:meal,mk:mk,k:k,day:day,time:time,dish:dish,v:num(price)})})});
  return out}
 var CRT={fr:"📝 Demandes du client",en:"📝 Customer requests",ar:"📝 طلبات الزبون"};
-function crit(l){var P=window.FRH_PREF,Q=(typeof FRH_PT!=="undefined"&&FRH_PT[l])||null;if(!P||!P.on||!Q)return "";var o=P.opt||{},r=[];
+var ALG={fr:["⚠️ *ALLERGIE / INTOLÉRANCE DU CLIENT*","Merci de confirmer par retour que le plat est adapté."],en:["⚠️ *CUSTOMER ALLERGY / INTOLERANCE*","Please confirm by reply that the dish is suitable."],ar:["⚠️ *حساسية / عدم تحمّل لدى الزبون*","يُرجى التأكيد بالرد أن الطبق مناسب."]};
+function crit(l){var P=window.FRH_PREF,Q=(typeof FRH_PT!=="undefined"&&FRH_PT[l])||null;if(!P||!P.on||!Q)return "";var o=P.opt||{},r=[],al=[],out=[];
+ ["gluten","lact","nuts"].forEach(function(x){if(o[x])al.push((Q.o&&Q.o[x])||x)});
  if(P.prof&&P.prof!=="omni"&&Q.p&&Q.p[P.prof])r.push(Q.p[P.prof]);
- ["gluten","lact","nuts","salt","sugar","big","sweetsalt"].forEach(function(x){if(o[x])r.push((Q.o&&Q.o[x])||x)});
- return r.length?CRT[l]+" : "+r.join(" · "):""}
+ ["salt","sugar","big","sweetsalt"].forEach(function(x){if(o[x])r.push((Q.o&&Q.o[x])||x)});
+ if(al.length)out.push(ALG[l][0]+" : "+al.join(" · "),ALG[l][1]);
+ if(r.length)out.push(CRT[l]+" : "+r.join(" · "));
+ return out.join("\n")}
 var LS=["fr","en","ar"];
 function dayL(k,l,fb){try{if(window.FRH_S||(typeof FRH_S!=="undefined"&&FRH_S)){var S=FRH_S,dt=new Date(S.y,S.m-1,S.d+k);return dt.toLocaleDateString(l==="ar"?"ar-AE":l,{weekday:"long",day:"numeric",month:"long"})}}catch(e){}return fb}
 function three(f){return LS.map(function(l){return f(T[l],l)}).join(" / ")}
