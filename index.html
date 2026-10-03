@@ -757,7 +757,7 @@ var FRH_PT={fr:{t:"🧞 Farhoum choisit les plats",h1:"Profil :",h2:"Allergies e
 function frhPrefHTML(){var P=window.FRH_PREF,q=FRH_PT[LANG]||FRH_PT.fr;
  function cb(k){return '<label class="frac"><input type="checkbox" class="frpo" data-k="'+k+'"'+(P.opt[k]?" checked":"")+'> <span class="frat">'+q.o[k]+'</span></label>'}
  function hd(t){return '<b style="display:block;grid-column:1/-1;margin-top:6px;font-size:.82rem;color:#ffd700">'+t+'</b>'}
- return '<label class="frac"><input type="checkbox" id="frhA_pref"'+(P.on?" checked":"")+'> <span class="frat">'+q.t+'</span></label>'+
+ return '<label class="frac" id="frhPrefL"><input type="checkbox" id="frhA_pref"'+(P.on?" checked":"")+'> <span class="frat">'+q.t+'</span></label>'+
  '<div id="frhPrefP" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;padding:8px 10px;border:1px solid rgba(255,215,0,.45);border-radius:12px"'+(P.on?"":" hidden")+'>'+
  hd(q.h1)+["omni","vege","pesc","vegan","flex"].map(function(k){return '<label class="frac"><input type="radio" name="frhPrefProf" value="'+k+'"'+(P.prof===k?" checked":"")+'> <span class="frat">'+q.p[k]+'</span></label>'}).join("")+
  hd(q.h2)+["gluten","lact","nuts"].map(cb).join("")+hd(q.h3)+["salt","sugar"].map(cb).join("")+hd(q.h4)+["big","sweetsalt"].map(cb).join("")+
@@ -1487,6 +1487,18 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
  fbusy=0;var o=document.getElementById("frhOut");if(o)window.__frhWeb(o)};
 })();
 </script>
+<style>
+/* ===== Farhoum choisit les plats : mise en valeur ===== */
+#frhAc #frhPrefL{grid-column:1/-1;padding:8px 10px;border-radius:12px;border:1.5px solid #ffd700;background:linear-gradient(135deg,rgba(255,215,0,.22),rgba(127,227,255,.10));font-weight:800;color:#ffd700;animation:frpGlow 2.4s ease-in-out infinite}
+#frhAc #frhPrefL .frat{font-size:.95rem}
+.frpref{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;margin:6px 0 2px;padding:7px 10px;border-radius:12px;border:1.5px solid #ffd700;background:linear-gradient(135deg,rgba(255,215,0,.28),rgba(20,28,46,.85));color:#fff;font-size:.9rem;animation:frpGlow 2.4s ease-in-out infinite}
+.frpref .frpg{font-size:1.15rem}
+.frpref .frpd{color:#ffe866;font-weight:800}
+.frpref .frpp{margin-inline-start:auto;padding:2px 9px;border-radius:99px;background:#ffd700;color:#0d1a3a;font-weight:800;white-space:nowrap}
+.frpref>span[style]{flex-basis:100%;font-size:.8rem}
+.frpref.frpn{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.06);animation:none;color:rgba(255,255,255,.8)}
+@keyframes frpGlow{0%,100%{box-shadow:0 0 0 rgba(255,215,0,0)}50%{box-shadow:0 0 14px rgba(255,215,0,.75)}}
+</style>
 <script>
 /* ===== Bouton « Voir le menu » : affiché seulement si le worker trouve une page menu ===== */
 (function(){
@@ -1506,13 +1518,13 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
     if(!/\/uae\/restaurant\/\d+\//i.test(site))return;
     frhDish(a);frhPref(a);
     var n=nameOf(a);if(!n||fqs[n])return;
-    var c=FM[n];if(c&&c.v===2&&c.branch===site&&c.items&&c.items.length&&Date.now()-c.at<864e5)return; /* déjà lu il y a moins de 24 h */
+    var c=FM[n];if(c&&c.v===3&&c.branch===site&&c.items&&c.items.length&&Date.now()-c.at<864e5)return; /* déjà lu il y a moins de 24 h */
     fqs[n]=1;fq.push({n:n,site:site});fnext();
   }
   function fnext(){
     if(fbusy||!fq.length)return;fbusy=true;var t=fq.shift();
     fetch(W+"?menu="+encodeURIComponent(t.site)).then(function(r){return r.json()}).then(function(j){
-      if(j&&j.items&&j.items.length){FM[t.n]={v:2,branch:t.site,at:Date.now(),items:j.items};fsave();window.__frhDishAll()}
+      if(j&&j.items&&j.items.length){FM[t.n]={v:3,branch:t.site,at:Date.now(),items:j.items};fsave();window.__frhDishAll()}
     }).catch(function(){}).then(function(){delete fqs[t.n];fbusy=false;fnext()});
   }
   /* Option « Plat le moins cher » : Farhoum choisit 1 plat par repas du programme, le moins cher du menu, avec son prix */
@@ -1561,9 +1573,11 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
     var P=window.FRH_PREF,c=FM[nameOf(a)];
     if(!P||!P.on||!c||!c.items||!c.items.length){if(sp)sp.remove();return}
     var q=(typeof FRH_PT!=="undefined"&&(FRH_PT[LANG]||FRH_PT.fr))||{warn:"⚠️",none:"🧞 —"},b=frhPrefPick(c.items,P),o=P.opt||{};
-    if(!sp){sp=document.createElement("span");sp.className="frpref";sp.style.cssText="display:block;font-size:.82rem;color:#7fe3ff;margin-top:2px";after.parentNode.insertBefore(sp,after.nextSibling)}
+    if(!sp){sp=document.createElement("span");sp.className="frpref";after.parentNode.insertBefore(sp,after.nextSibling)}
     var raw=b?itP(b.it):null,ps=b?((typeof raw==="string"&&/[^\d.,\s]/.test(raw))?raw.trim():b.v+" AED"):"";
-    sp.textContent=b?"🧞 "+itN(b.it)+" — "+ps:q.none;
+    sp.textContent="";sp.classList.toggle("frpn",!b);
+    if(b){var g=document.createElement("span");g.className="frpg";g.textContent="🧞";var nm=document.createElement("b");nm.className="frpd";nm.textContent=(LANG==="ar"&&b.it.nameAr)||itN(b.it);var pz=document.createElement("span");pz.className="frpp";pz.textContent=ps;sp.appendChild(g);sp.appendChild(nm);sp.appendChild(pz)}
+    else sp.textContent=q.none;
     if(b&&(o.gluten||o.lact||o.nuts||o.salt||o.sugar)){var w=document.createElement("span");w.style.cssText="display:block;color:#ffb347";w.textContent=q.warn;sp.appendChild(w)}}
   window.__frhDishAll=function(){Array.prototype.forEach.call(document.querySelectorAll("#frhOut a.tmenu"),function(a){frhDish(a);frhPref(a)})};
   window.__frhMenus=function(){return FM};
