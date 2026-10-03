@@ -1609,37 +1609,58 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
 /* ===== Farhoum commande par WhatsApp (modèle SODELEC) ===== */
 #frhCmdW{margin:10px 0 4px}
 #frhCmd{display:block;width:100%;padding:12px 14px;border:1.5px solid #ffd700;border-radius:14px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+#frhCmdNL{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;color:#ffd700;font-weight:800}
+#frhCmdN{padding:4px 8px;border-radius:8px;font-weight:800}
 #frhCmdM{display:none;margin-top:6px;padding:8px 10px;border-radius:10px;background:#b3261e;color:#fff;font-size:.9rem}
 </style>
 <script>
 /* ===== Farhoum commande seul : tous les plats du programme en une seule commande WhatsApp (modèle SODELEC) ===== */
 (function(){
 var TEL="21653906104"; /* restaurant de test : 53906104 (Tunisie, +216) */
-var T={fr:{b:"🧞 Farhoum commande tous les plats",wo:"Nouvelle commande Farhoum",onum:"N° commande",odat:"Date",tot:"Total",e1:"🧞 Aucun plat choisi pour l'instant dans le programme.",ok:"🧞 Farhoum a envoyé la commande par WhatsApp."},
- en:{b:"🧞 Farhoum orders all the dishes",wo:"New Farhoum order",onum:"Order no.",odat:"Date",tot:"Total",e1:"🧞 No dish chosen in the programme yet.",ok:"🧞 Farhoum sent the order via WhatsApp."},
- ar:{b:"🧞 فرحوم يطلب كل الأطباق",wo:"طلب جديد من فرحوم",onum:"رقم الطلب",odat:"التاريخ",tot:"المجموع",e1:"🧞 لا يوجد أي طبق مختار في البرنامج بعد.",ok:"🧞 أرسل فرحوم الطلب عبر واتساب."}};
+var T={fr:{b:"🧞 Farhoum commande tous les plats",np:"👥 Nombre de personnes :",e0:"🧞 Choisis d'abord le nombre de personnes.",wo:"Nouvelle commande Farhoum",onum:"N° commande",odat:"Date",
+  hi:"Bonjour ! Je suis Farhoum 🧞, le génie de votre futur client. Je vous transmets à l'avance sa commande pour le {m}, afin que tout soit prêt à son arrivée.",
+  arr:"🕐 Arrivée prévue",at:"à",res:"👥 Réservation",pp:"personne",ml:{lunch:"déjeuner",dinner:"dîner"},cmd:"🛒 Commande",st:"Sous-total",bye:"Merci beaucoup, et à tout à l'heure !",tot:"Total général",
+  e1:"🧞 Aucun plat choisi pour l'instant dans le programme.",ok:"🧞 Farhoum a envoyé la commande par WhatsApp."},
+ en:{b:"🧞 Farhoum orders all the dishes",np:"👥 Number of people:",e0:"🧞 First choose the number of people.",wo:"New Farhoum order",onum:"Order no.",odat:"Date",
+  hi:"Hello! I'm Farhoum 🧞, your future guest's genie. I'm sending you his order for {m} in advance, so that everything is ready when he arrives.",
+  arr:"🕐 Expected arrival",at:"at",res:"👥 Reservation",pp:"person",ml:{lunch:"lunch",dinner:"dinner"},cmd:"🛒 Order",st:"Subtotal",bye:"Thank you very much, see you soon!",tot:"Grand total",
+  e1:"🧞 No dish chosen in the programme yet.",ok:"🧞 Farhoum sent the order via WhatsApp."},
+ ar:{b:"🧞 فرحوم يطلب كل الأطباق",np:"👥 عدد الأشخاص:",e0:"🧞 اختر أولًا عدد الأشخاص.",wo:"طلب جديد من فرحوم",onum:"رقم الطلب",odat:"التاريخ",
+  hi:"السلام عليكم! أنا فرحوم 🧞، جنّيّ زبونكم القادم. أرسل إليكم مسبقًا طلبه لوجبة {m}، حتى يكون كل شيء جاهزًا عند وصوله.",
+  arr:"🕐 الوصول المتوقع",at:"على الساعة",res:"👥 الحجز",pp:"شخص",ml:{lunch:"الغداء",dinner:"العشاء"},cmd:"🛒 الطلب",st:"المجموع الفرعي",bye:"شكرًا جزيلًا، وإلى اللقاء قريبًا!",tot:"المجموع الكلي",
+  e1:"🧞 لا يوجد أي طبق مختار في البرنامج بعد.",ok:"🧞 أرسل فرحوم الطلب عبر واتساب."}};
 function q(){return T[(typeof LANG!=="undefined"&&LANG)||"fr"]||T.fr}
 function od(now){now=now||new Date();var g={};new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Dubai",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(now).forEach(function(x){g[x.type]=x.value});
  return {date:g.day+"/"+g.month+"/"+g.year+" "+g.hour+":"+g.minute,code:g.day+g.month+String(g.year).slice(2)+"-"+g.hour+g.minute}}
 function num(s){var m=String(s||"").replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:0}
-function collect(){var o=document.getElementById("frhOut"),out=[],s=0;if(!o)return {d:out,s:0};
- Array.prototype.forEach.call(o.querySelectorAll("details.frd"),function(dt){var sm=dt.querySelector("summary"),day=sm?sm.textContent.replace(/\s+/g," ").trim():"",rows=[];
+function r2(v){return Math.round(v*100)/100}
+function collect(){var o=document.getElementById("frhOut"),out=[];if(!o)return out;
+ Array.prototype.forEach.call(o.querySelectorAll("details.frd"),function(dt,k){var sm=dt.querySelector("summary small"),day=sm?sm.textContent.trim():"";
   Array.prototype.forEach.call(dt.querySelectorAll("li"),function(li){var a=li.querySelector("a.tmenu");if(!a)return;
-   var w=li.querySelector("a.frweb"),rest=w?w.getAttribute("data-n"):"",lab=li.querySelector(".frx>b"),meal=lab?lab.textContent.trim():"",dish="",price="";
+   var w=li.querySelector("a.frweb"),rest=w?w.getAttribute("data-n"):"",lab=li.querySelector(".frx>b"),meal=lab?lab.textContent.trim():"",tm=li.querySelector(".frt"),time=tm?tm.textContent.trim():"",dish="",price="";
    var p=li.querySelector(".frpref:not(.frpn)");
-   if(p&&p.querySelector(".frpd")){dish=p.querySelector(".frpd").textContent.trim();price=(p.querySelector(".frpp")||{}).textContent||""}
+   if(p&&p.querySelector(".frpd")){dish=p.querySelector(".frpd").textContent.trim();price=((p.querySelector(".frpp")||{}).textContent||"").trim()}
    else{var c=li.querySelector(".frdish");if(c){var tx=c.textContent.replace(/^🍛\s*/,""),i=tx.lastIndexOf(" — ");if(i>0){dish=tx.slice(0,i).trim();price=tx.slice(i+3).trim()}}}
-   if(!dish)return;s+=num(price);rows.push("- 1 × "+dish+" — "+price.trim()+" ("+meal+(rest?" · "+rest:"")+")")});
-  if(rows.length)out.push({day:day,rows:rows})});
- return {d:out,s:s}}
-function crit(){var P=window.FRH_PREF,Q=(typeof FRH_PT!=="undefined"&&(FRH_PT[LANG]||FRH_PT.fr))||null;if(!P||!P.on||!Q||!Q.warn)return "";var o=P.opt||{};
- var k=["gluten","lact","nuts","salt","sugar"].filter(function(x){return o[x]});return k.length?Q.warn+k.map(function(x){return (Q.wk&&Q.wk[x])||x}).join(" · "):""}
+   var mk="lunch";if(typeof FRT!=="undefined")["fr","en","ar"].forEach(function(l){if(FRT[l]&&meal===FRT[l].dinner)mk="dinner"});if(dish)out.push({rest:rest,meal:meal,mk:mk,k:k,day:day,time:time,dish:dish,v:num(price)})})});
+ return out}
+var CRT={fr:"📝 Demandes du client",en:"📝 Customer requests",ar:"📝 طلبات الزبون"};
+function crit(l){var P=window.FRH_PREF,Q=(typeof FRH_PT!=="undefined"&&FRH_PT[l])||null;if(!P||!P.on||!Q)return "";var o=P.opt||{},r=[];
+ if(P.prof&&P.prof!=="omni"&&Q.p&&Q.p[P.prof])r.push(Q.p[P.prof]);
+ ["gluten","lact","nuts","salt","sugar","big","sweetsalt"].forEach(function(x){if(o[x])r.push((Q.o&&Q.o[x])||x)});
+ return r.length?CRT[l]+" : "+r.join(" · "):""}
+var LS=["fr","en","ar"];
+function dayL(k,l,fb){try{if(window.FRH_S||(typeof FRH_S!=="undefined"&&FRH_S)){var S=FRH_S,dt=new Date(S.y,S.m-1,S.d+k);return dt.toLocaleDateString(l==="ar"?"ar-AE":l,{weekday:"long",day:"numeric",month:"long"})}}catch(e){}return fb}
+function three(f){return LS.map(function(l){return f(T[l],l)}).join(" / ")}
 function order(){var L=q(),m=document.getElementById("frhCmdM");m.style.display="block";m.style.background="#b3261e";
- var r=collect();if(!r.d.length){m.textContent=L.e1;return}
- var o=od(),w=["*"+L.wo+"*",L.onum+" : FRH-"+o.code,L.odat+" : "+o.date,""];
- r.d.forEach(function(x){w.push("*"+x.day+"*");x.rows.forEach(function(l){w.push(l)});w.push("")});
- var c=crit();if(c){w.push(c);w.push("")}
- w.push(L.tot+" : "+(Math.round(r.s*100)/100)+" AED");
+ var r=collect();if(!r.length){m.textContent=L.e1;return}
+ var o=od(),s=0,w=["*"+three(function(X){return X.wo})+"*",three(function(X){return X.onum})+" : FRH-"+o.code,three(function(X){return X.odat})+" : "+o.date];
+ r.forEach(function(x){var st=x.v;s+=st;
+  w.push("","━━━━━━━━━━━━","🍽 *"+(x.rest||"—")+"*");
+  LS.forEach(function(l){var X=T[l],c=crit(l);
+   w.push("",X.hi.replace("{m}",X.ml[x.mk]),"",X.arr+" : "+dayL(x.k,l,x.day)+" "+X.at+" "+x.time,X.res+" : 1 "+X.pp,X.cmd+" :","- 1 × "+x.dish+" — "+r2(st)+" AED");
+   if(c)w.push(c);
+   w.push(X.st+" : "+r2(st)+" AED",X.bye)})});
+ w.push("","━━━━━━━━━━━━",three(function(X){return X.tot})+" : "+r2(s)+" AED");
  var u="https://wa.me/"+TEL+"?text="+encodeURIComponent(w.join("\n"));if(!window.open(u,"_blank"))location.href=u;
  m.style.background="#128c7e";m.textContent=L.ok}
 function init(){var o=document.getElementById("frhOut");if(!o||document.getElementById("frhCmdW"))return;
@@ -1647,7 +1668,7 @@ function init(){var o=document.getElementById("frhOut");if(!o||document.getEleme
  var b=document.getElementById("frhCmd");b.onclick=order;
  function upd(){b.textContent=q().b}
  upd();new MutationObserver(upd).observe(o,{childList:true});
- new MutationObserver(function(){b.textContent=q().b}).observe(document.documentElement,{attributes:true,attributeFilter:["lang","dir"]})}
+ new MutationObserver(upd).observe(document.documentElement,{attributes:true,attributeFilter:["lang","dir"]})}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script>
