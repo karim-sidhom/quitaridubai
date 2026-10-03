@@ -740,7 +740,35 @@ setInterval(prTick,1000);
 var SOS_T={fr:{h:'🚨 Numéros utiles à Dubaï',n:'Appuie sur un bouton pour appeler directement.',police:'Police de Dubaï',amb:'Ambulance de Dubaï',fire:'Défense civile · Pompiers',taxi:'Taxi de Dubaï (RTA)'},en:{h:'🚨 Useful numbers in Dubai',n:'Tap a button to call directly.',police:'Dubai Police',amb:'Dubai Ambulance',fire:'Civil Defence · Fire',taxi:'Dubai Taxi (RTA)'},ar:{h:'🚨 أرقام مفيدة في دبي',n:'اضغط على الزر للاتصال مباشرة.',police:'شرطة دبي',amb:'إسعاف دبي',fire:'الدفاع المدني · الإطفاء',taxi:'تاكسي دبي (هيئة الطرق)'}};
 var SOS_L=[['police','999','999','#2ea36b','<svg viewBox="0 0 48 48"><defs><linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f8a5b"/><stop offset="1" stop-color="#0a4a30"/></linearGradient></defs><path d="M24 2 42 8v14c0 12-8 20-18 24C14 42 6 34 6 22V8Z" fill="url(#gp)" stroke="#f0c040" stroke-width="2"/><path d="M14 15 34 33M34 15 14 33" stroke="#f0c040" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="24" r="7" fill="#0a4a30" stroke="#f0c040" stroke-width="2"/><path d="M24 19.5l1.4 3 3.2.3-2.4 2.1.8 3.2-3-1.7-3 1.7.8-3.2-2.4-2.1 3.2-.3Z" fill="#f0c040"/></svg>'],['amb','998','998','#e5323b','<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#d81f2a" stroke="#fff" stroke-width="2"/><g stroke="#fff" stroke-width="4.4" stroke-linecap="round"><path d="M24 9v30"/><path d="M11 16.5 37 31.5"/><path d="M37 16.5 11 31.5"/></g><path d="M24 13v22" stroke="#d81f2a" stroke-width="1.6"/></svg>'],['fire','997','997','#ff7a1a','<svg viewBox="0 0 48 48"><defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e02a25"/><stop offset="1" stop-color="#8f0f14"/></linearGradient></defs><path d="M24 2 42 8v14c0 12-8 20-18 24C14 42 6 34 6 22V8Z" fill="url(#gf)" stroke="#fff" stroke-width="2"/><path d="M24 10c2 6 9 9 9 17a9 9 0 0 1-18 0c0-4 2-6 4-8 0 3 1 4 3 4-2-5-1-9 2-13Z" fill="#ffb01f"/><path d="M24 24c1 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 2 2 2-1-3-1-5 1-7Z" fill="#fff3b0"/></svg>'],['taxi','+97142080808','04 208 0808','#f5c518','<svg viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="12" fill="#c8102e" stroke="#fff" stroke-width="2"/><rect x="19" y="8" width="10" height="5" rx="1.5" fill="#ffd700"/><path d="M11 28l3-8c.4-1 1.3-1.6 2.4-1.6h15.2c1.1 0 2 .6 2.4 1.6l3 8v7h-4v-2.5H15V35h-4Z" fill="#fff"/><path d="M16.6 21h14.8l2 6H14.6Z" fill="#c8102e" opacity=".85"/><circle cx="16" cy="30.5" r="2" fill="#c8102e"/><circle cx="32" cy="30.5" r="2" fill="#c8102e"/><text x="24" y="43" font-family="Arial,sans-serif" font-size="7" font-weight="800" fill="#fff" text-anchor="middle">RTA</text></svg>']];
 function frhSos(){var g=$('sosG');if(!g)return;var t=SOS_T[LANG]||SOS_T.fr;$('sosH').textContent=t.h;$('sosN').textContent=t.n;g.innerHTML=SOS_L.map(function(a){return '<a class="sosb" style="--c:'+a[3]+'" href="tel:'+a[1]+'" aria-label="'+t[a[0]]+' '+a[2]+'">'+a[4]+'<span class="t"><b>'+t[a[0]]+'</b><span class="n">'+a[2]+'</span></span><span class="c">📞</span></a>'}).join('');if(!g._b){g._b=1;g.addEventListener('click',function(e){var a=e.target.closest('a.sosb');if(!a)return;e.preventDefault();window.location.href=a.getAttribute('href')})}}
-window.__frhLang=function(){var q=FRT[LANG]||FRT.fr;if(!$("frhHi"))return;frhSos();$("frhHi").textContent=q.hi;$("frhDl").textContent=q.date;$("frhNl").textContent=q.days;$("frhHl").textContent=q.hotel;frhFillH();$("frhHtl").textContent=q.htL;$("frhAl").textContent=q.actL;var ac0=$("frhAc"),old={},oN;oN={};FRH_AT.forEach(function(a){var e=$("frhA_"+a[0]);old[a[0]]=e?e.checked:false;var nn=$("frhAN_"+a[0]);oN[a[0]]=nn?nn.value:"1"});var shn=$("frhShN")?$("frhShN").value:"1";ac0.innerHTML=FRH_AT.map(function(a){return '<label class="frac"><input type="checkbox" id="frhA_'+a[0]+'"'+(old[a[0]]?" checked":"")+'> <span class="frat">'+a[1]+' '+q.at[a[0]]+'</span>'+(a[0]!=="shisha"?' <span class="frwk" id="frhAW_'+a[0]+'"'+(old[a[0]]?"":" hidden")+'><select id="frhAN_'+a[0]+'">'+[1,2,3,4,5,6,7].map(function(i){return '<option'+(String(i)===oN[a[0]]?" selected":"")+'>'+i+'</option>'}).join("")+'</select>'+q.wk+'</span>':"")+'</label>'}).join("")+'<label class="frac frshn" id="frhShL">'+q.shN+' <select id="frhShN"><option>1</option><option>2</option><option>3</option></select></label>';$("frhShN").value=shn;var shc=$("frhA_shisha"),shl=$("frhShL");shl.hidden=!shc.checked;shc.addEventListener("change",function(){shl.hidden=!shc.checked});FRH_AT.forEach(function(a){if(a[0]==="shisha")return;var cb=$("frhA_"+a[0]),wk=$("frhAW_"+a[0]);if(cb&&wk)cb.addEventListener("change",function(){wk.hidden=!cb.checked})});$("frhHt").placeholder=q.htPh;if(!$("frhHtL").options.length)$("frhHtL").innerHTML=FRH_HT.map(function(h){return '<option value="'+h[2].replace(/"/g,"&quot;")+'">'}).join("");frhHtInfo();$("frhGo").textContent=q.go;frhRender()};
+/* ===== Onglet « Farhoum choisit les plats » : profil, allergies, sel/sucre, saveur/portion, fourchette de prix ===== */
+window.FRH_PREF=window.FRH_PREF||{on:false,prof:"omni",opt:{},min:"",max:""};
+var FRH_PT={fr:{t:"🧞 Farhoum choisit les plats",h1:"Profil :",h2:"Allergies et intolérances :",h3:"Sel et sucre :",h4:"Saveur ou portion :",h5:"Prix (AED) :",mn:"min",mx:"max",
+ p:{omni:"Omnivore / Classique",vege:"Végétarien",pesc:"Pescétarien",vegan:"Végan (100 % végétal)",flex:"Flexitarien"},
+ o:{gluten:"Sans gluten",lact:"Sans lactose",nuts:"Sans fruits à coque / arachides",salt:"Hyposodé / pauvre en sel",sugar:"Sans sucre ajouté / pauvre en sucre",big:"Copieux / généreux",sweetsalt:"Salé-sucré"},
+ warn:"⚠️ à confirmer avec le restaurant",none:"🧞 Aucun plat ne correspond à tes choix"},
+ en:{t:"🧞 Farhoum picks the dishes",h1:"Profile:",h2:"Allergies & intolerances:",h3:"Salt & sugar:",h4:"Flavour or portion:",h5:"Price (AED):",mn:"min",mx:"max",
+ p:{omni:"Omnivore / Classic",vege:"Vegetarian",pesc:"Pescatarian",vegan:"Vegan (100% plant-based)",flex:"Flexitarian"},
+ o:{gluten:"Gluten-free",lact:"Lactose-free",nuts:"No tree nuts / peanuts",salt:"Low-sodium / low-salt",sugar:"No added sugar / low-sugar",big:"Hearty / generous",sweetsalt:"Sweet & savoury"},
+ warn:"⚠️ to be confirmed with the restaurant",none:"🧞 No dish matches your choices"},
+ ar:{t:"🧞 فرحوم يختار الأطباق",h1:"الملف:",h2:"الحساسية وعدم التحمّل:",h3:"الملح والسكر:",h4:"النكهة أو الحصة:",h5:"السعر (درهم):",mn:"من",mx:"إلى",
+ p:{omni:"آكل كل شيء / كلاسيكي",vege:"نباتي",pesc:"نباتي يأكل السمك",vegan:"نباتي صرف (100% نباتي)",flex:"مرن (نباتي غالبًا)"},
+ o:{gluten:"خالٍ من الغلوتين",lact:"خالٍ من اللاكتوز",nuts:"بدون مكسرات / فول سوداني",salt:"قليل الملح",sugar:"بدون سكر مضاف / قليل السكر",big:"وفير / مُشبِع",sweetsalt:"مالح-حلو"},
+ warn:"⚠️ يُرجى التأكد من المطعم",none:"🧞 لا يوجد طبق يطابق اختياراتك"}};
+function frhPrefHTML(){var P=window.FRH_PREF,q=FRH_PT[LANG]||FRH_PT.fr;
+ function cb(k){return '<label class="frac"><input type="checkbox" class="frpo" data-k="'+k+'"'+(P.opt[k]?" checked":"")+'> <span class="frat">'+q.o[k]+'</span></label>'}
+ function hd(t){return '<b style="display:block;grid-column:1/-1;margin-top:6px;font-size:.82rem;color:#ffd700">'+t+'</b>'}
+ return '<label class="frac"><input type="checkbox" id="frhA_pref"'+(P.on?" checked":"")+'> <span class="frat">'+q.t+'</span></label>'+
+ '<div id="frhPrefP" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;padding:8px 10px;border:1px solid rgba(255,215,0,.45);border-radius:12px"'+(P.on?"":" hidden")+'>'+
+ hd(q.h1)+["omni","vege","pesc","vegan","flex"].map(function(k){return '<label class="frac"><input type="radio" name="frhPrefProf" value="'+k+'"'+(P.prof===k?" checked":"")+'> <span class="frat">'+q.p[k]+'</span></label>'}).join("")+
+ hd(q.h2)+["gluten","lact","nuts"].map(cb).join("")+hd(q.h3)+["salt","sugar"].map(cb).join("")+hd(q.h4)+["big","sweetsalt"].map(cb).join("")+
+ hd(q.h5)+'<label class="frac">'+q.mn+' <input type="number" min="0" step="1" id="frhPrefMin" style="width:80px" value="'+P.min+'"></label><label class="frac">'+q.mx+' <input type="number" min="0" step="1" id="frhPrefMax" style="width:80px" value="'+P.max+'"></label></div>'}
+function frhPrefBind(){var P=window.FRH_PREF,c=$("frhA_pref"),pn=$("frhPrefP");if(!c||!pn)return;
+ function upd(){if(window.__frhDishAll)window.__frhDishAll()}
+ c.addEventListener("change",function(){P.on=c.checked;pn.hidden=!c.checked;upd()});
+ Array.prototype.forEach.call(pn.querySelectorAll('input[name="frhPrefProf"]'),function(r){r.addEventListener("change",function(){if(r.checked){P.prof=r.value;upd()}})});
+ Array.prototype.forEach.call(pn.querySelectorAll(".frpo"),function(x){x.addEventListener("change",function(){P.opt[x.dataset.k]=x.checked;upd()})});
+ ["Min","Max"].forEach(function(k){var e=$("frhPref"+k);e.addEventListener("input",function(){P[k.toLowerCase()]=e.value.trim();upd()})})}
+window.__frhLang=function(){var q=FRT[LANG]||FRT.fr;if(!$("frhHi"))return;frhSos();$("frhHi").textContent=q.hi;$("frhDl").textContent=q.date;$("frhNl").textContent=q.days;$("frhHl").textContent=q.hotel;frhFillH();$("frhHtl").textContent=q.htL;$("frhAl").textContent=q.actL;var ac0=$("frhAc"),old={},oN;oN={};FRH_AT.forEach(function(a){var e=$("frhA_"+a[0]);old[a[0]]=e?e.checked:false;var nn=$("frhAN_"+a[0]);oN[a[0]]=nn?nn.value:"1"});var shn=$("frhShN")?$("frhShN").value:"1",dsh=$("frhA_dish")?$("frhA_dish").checked:false;ac0.innerHTML=FRH_AT.map(function(a){return '<label class="frac"><input type="checkbox" id="frhA_'+a[0]+'"'+(old[a[0]]?" checked":"")+'> <span class="frat">'+a[1]+' '+q.at[a[0]]+'</span>'+(a[0]!=="shisha"?' <span class="frwk" id="frhAW_'+a[0]+'"'+(old[a[0]]?"":" hidden")+'><select id="frhAN_'+a[0]+'">'+[1,2,3,4,5,6,7].map(function(i){return '<option'+(String(i)===oN[a[0]]?" selected":"")+'>'+i+'</option>'}).join("")+'</select>'+q.wk+'</span>':"")+'</label>'}).join("")+'<label class="frac"><input type="checkbox" id="frhA_dish"'+(dsh?" checked":"")+'> <span class="frat">'+({fr:"🍛 Plat le moins cher du menu",en:"🍛 Cheapest dish on the menu",ar:"🍛 أرخص طبق في القائمة"}[LANG]||"🍛 Plat le moins cher du menu")+'</span></label>'+frhPrefHTML()+'<label class="frac frshn" id="frhShL">'+q.shN+' <select id="frhShN"><option>1</option><option>2</option><option>3</option></select></label>';$("frhShN").value=shn;$("frhA_dish").addEventListener("change",function(){if(window.__frhDishAll)window.__frhDishAll()});frhPrefBind();var shc=$("frhA_shisha"),shl=$("frhShL");shl.hidden=!shc.checked;shc.addEventListener("change",function(){shl.hidden=!shc.checked});FRH_AT.forEach(function(a){if(a[0]==="shisha")return;var cb=$("frhA_"+a[0]),wk=$("frhAW_"+a[0]);if(cb&&wk)cb.addEventListener("change",function(){wk.hidden=!cb.checked})});$("frhHt").placeholder=q.htPh;if(!$("frhHtL").options.length)$("frhHtL").innerHTML=FRH_HT.map(function(h){return '<option value="'+h[2].replace(/"/g,"&quot;")+'">'}).join("");frhHtInfo();$("frhGo").textContent=q.go;frhRender()};
 (function(){var n=new Date(Date.now()+(new Date().getTimezoneOffset()+240)*6e4),dd=$("frhD");if(dd)dd.value=n.getFullYear()+"-"+("0"+(n.getMonth()+1)).slice(-2)+"-"+("0"+n.getDate()).slice(-2);
  if($("frhHt")){$("frhHt").addEventListener("input",frhHtInfo);$("frhH").addEventListener("change",function(){$("frhHt").value="";frhHtInfo()})}
  if($("frhGo"))$("frhGo").onclick=function(){var v=($("frhD").value||dd.value).split("-");FRH_S={y:+v[0],m:+v[1],d:+v[2],n:Math.min(FRH_D.length,Math.max(1,+$("frhN").value||3))};frhRender();$("frhOut").scrollIntoView({behavior:"smooth",block:"start"})};
@@ -1468,24 +1496,76 @@ window.__frhWeb=async function(root){if(!root)return;fpaint(root);if(fbusy)retur
   function save(){var k={};for(var q in mem)if(mem[q])k[q]=mem[q];try{localStorage.setItem("tmenuC4",JSON.stringify(k))}catch(e){}} /* seuls les menus trouvés sont gardés d'une visite à l'autre */
   var queue=[],busy=0,MAX=1,wait={}; /* une demande à la fois : évite le blocage par les moteurs de recherche */
   function apply(a,site){if(site){a.href=site;a.style.display="";frhMenuRead(a,site)}else{a.style.display="none"}}
-  /* Farhoum lit les menus des restaurants de son programme, un par un, et les garde pour décider plus tard */
+  /* Farhoum lit les menus de tous les restaurants de l'app, un par un, via le worker, et les garde pour décider plus tard */
   var FM={};try{FM=JSON.parse(localStorage.getItem("frhMenus1")||"{}")||{}}catch(e){}
   var fq=[],fbusy=false,fqs={};
   function fsave(){try{localStorage.setItem("frhMenus1",JSON.stringify(FM))}catch(e){}}
   function nameOf(a){return (a.__q||"").replace(/^site:talabat\.com\s+/i,"").replace(/\s+Dubai$/i,"").trim()}
   function frhMenuRead(a,site){
-    if(!a.closest||!a.closest("#frhOut"))return; /* seulement le programme de Farhoum */
+    /* Farhoum lit TOUS les menus trouvés dans l'app (programme + services de chaque station) et les garde */
     if(!/\/uae\/restaurant\/\d+\//i.test(site))return;
+    frhDish(a);frhPref(a);
     var n=nameOf(a);if(!n||fqs[n])return;
-    var c=FM[n];if(c&&c.branch===site&&c.items&&c.items.length&&Date.now()-c.at<864e5)return; /* déjà lu il y a moins de 24 h */
+    var c=FM[n];if(c&&c.v===2&&c.branch===site&&c.items&&c.items.length&&Date.now()-c.at<864e5)return; /* déjà lu il y a moins de 24 h */
     fqs[n]=1;fq.push({n:n,site:site});fnext();
   }
   function fnext(){
     if(fbusy||!fq.length)return;fbusy=true;var t=fq.shift();
     fetch(W+"?menu="+encodeURIComponent(t.site)).then(function(r){return r.json()}).then(function(j){
-      if(j&&j.items&&j.items.length){FM[t.n]={branch:t.site,at:Date.now(),items:j.items};fsave()}
+      if(j&&j.items&&j.items.length){FM[t.n]={v:2,branch:t.site,at:Date.now(),items:j.items};fsave();window.__frhDishAll()}
     }).catch(function(){}).then(function(){delete fqs[t.n];fbusy=false;fnext()});
   }
+  /* Option « Plat le moins cher » : Farhoum choisit 1 plat par repas du programme, le moins cher du menu, avec son prix */
+  function frhDishOn(){var e=document.getElementById("frhA_dish");return !!(e&&e.checked)}
+  function itP(it){return it?(it.p!=null?it.p:it.price!=null?it.price:it.prix):null}
+  function itN(it){return it&&(it.n||it.name||it.title||it.nom)||""}
+  function priceNum(v){if(typeof v==="number")return v;var m=String(v==null?"":v).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:NaN}
+  function frhDish(a){if(!a||!a.closest||!a.closest("#frhOut"))return;
+    var sp=a.nextElementSibling;if(!(sp&&sp.classList.contains("frdish")))sp=null;
+    var c=FM[nameOf(a)],best=null;
+    if(frhDishOn()&&c&&c.items)c.items.forEach(function(it){var v=priceNum(itP(it));if(!isNaN(v)&&v>0&&itN(it)&&(!best||v<best.v))best={v:v,it:it}});
+    if(!best){if(sp)sp.remove();return}
+    if(!sp){sp=document.createElement("span");sp.className="frdish";sp.style.cssText="display:block;font-size:.82rem;color:#ffd700;margin-top:2px";a.parentNode.insertBefore(sp,a.nextSibling)}
+    var raw=itP(best.it),ps=(typeof raw==="string"&&/[^\d.,\s]/.test(raw))?raw.trim():best.v+" AED";
+    sp.textContent="🍛 "+itN(best.it)+" — "+ps}
+  /* Farhoum choisit 1 plat par repas selon l'onglet : filtres (profil, allergies, sel/sucre, saveur/portion, prix) puis le plus populaire (top > Picks for you > note) */
+  var KW={
+   meat:["chicken","beef","mutton","lamb","goat","meat","kebab","kabab","kabob","kofta","kafta","shawarma","steak","sausage","bacon","ham","pepperoni","salami","turkey","duck","keema","kheema","qeema","murgh","murg","gosht","seekh","nihari","haleem","wing","nugget","liver","veal","hot dog","pork","non veg","non-veg","nonveg","brisket","ribs","mince","pastrami","دجاج","لحم","غنم","خروف","بقر","كباب","شاورما","كفتة","ستيك","ديك رومي","بط","كبدة"],
+   fish:["fish","salmon","tuna","shrimp","prawn","crab","lobster","calamari","squid","octopus","seafood","sea food","hammour","sardine","anchovy","anchovies","mussel","oyster","clam","scallop","cod","tilapia","sushi","سمك","روبيان","جمبري","سلمون","تونة","هامور","بحرية","كاليماري","حبار","سردين"],
+   egg:["egg","omelette","omelet","anda","mayo","mayonnaise","بيض","عجة"],
+   dairy:["cheese","cheesy","paneer","milk","milkshake","shake","cream","creamy","butter","makhani","makhan","ghee","yogurt","yoghurt","curd","dahi","lassi","kulfi","ice cream","malai","khoya","khoa","mawa","rabri","rabdi","raita","chaas","kadhi","labneh","halloumi","mozzarella","feta","parmesan","latte","cappuccino","chai","karak","custard","kheer","rasmalai","rasgulla","burfi","barfi","جبن","جبنة","حليب","قشطة","زبدة","لبن","لبنة","زبادي","كريمة","حلوم","آيس كريم","بوظة"],
+   honey:["honey","عسل"],
+   gluten:["bread","naan","nan","roti","paratha","parantha","chapati","chapatti","bhatura","bhature","kachori","samosa","puri","poori","papdi","golgappa","kulcha","pav","bun","toast","sandwich","burger","wrap","roll","pizza","pasta","spaghetti","macaroni","noodle","chowmein","momo","manchurian","cake","cookie","biscuit","rusk","croissant","pastry","puff","pie","wheat","atta","maida","flour","semolina","rava","suji","sooji","barley","rye","oat","oats","couscous","bulgur","burghul","breaded","crumb","tempura","waffle","pancake","crepe","donut","doughnut","brownie","muffin","bagel","pretzel","dumpling","shawarma","manakish","manaeesh","fatayer","beer","خبز","قمح","شعير","معكرونة","سميد","برغل","كسكس","دقيق","فطائر","مناقيش","كيك","بسكويت","معجنات"],
+   nuts:["nut","nuts","peanut","almond","cashew","pistachio","walnut","hazelnut","pecan","praline","marzipan","nutella","satay","kaju","badam","pista","pine nut","macadamia","مكسرات","لوز","فستق","كاجو","جوز","بندق","فول سوداني","صنوبر"],
+   sugar:["sweet","dessert","cake","chocolate","candy","syrup","sugar","jam","ice cream","kulfi","ladoo","laddu","laddoo","jalebi","gulab","halwa","barfi","burfi","rasgulla","rasmalai","kheer","mithai","custard","pudding","donut","doughnut","cookie","brownie","waffle","pancake","crepe","milkshake","shake","soda","cola","mojito","frappe","caramel","toffee","baklava","kunafa","knafeh","kunafeh","basbousa","luqaimat","umm ali","sorbet","lollipop","حلو","حلويات","سكر","شوكولاتة","شوكولا","كيك","كنافة","بقلاوة","بسبوسة","لقيمات","مربى","شراب","مهلبية"],
+   salt:["pickle","achar","achaar","salted","salty","chips","crisps","fries","soy","olive","olives","anchovy","anchovies","bacon","ham","salami","pepperoni","sausage","cured","smoked","namkeen","bhujia","papad","pretzel","feta","halloumi","pastrami","مخلل","مخللات","مملح","مالح","زيتون","مدخن"],
+   big:["combo","platter","family","feast","meal","thali","xl","xxl","large","jumbo","mega","giant","double","triple","full","bucket","box","mix grill","mixed grill","biryani","mandi","kabsa","ouzi","mansaf","gratin","burger","وجبة","عائلي","مشكل","مشكّل","برياني","مندي","كبسة","أوزي","منسف","كبير","دبل"],
+   sweetsalt:["honey","teriyaki","sweet and sour","sweet & sour","sweet chilli","sweet chili","hoisin","bbq","barbecue","barbeque","glazed","caramelized","caramelised","mango","pineapple","orange chicken","date","dates","chutney","tamarind","imli","saunth","عسل","ترياكي","حلو حامض","دبس","تمر","مانجو","أناناس","تمر هندي"]};
+  var KWR={};Object.keys(KW).forEach(function(k){var lat=[],ara=[];KW[k].forEach(function(w){(/[a-z]/i.test(w)?lat:ara).push(w)});
+   KWR[k]={re:lat.length?new RegExp("(^|[^a-z])("+lat.map(function(w){return w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}).join("|")+")(s|es)?(?![a-z])","i"):null,ar:ara}});
+  function kw(k,tx){var r=KWR[k];if(r.re&&r.re.test(tx))return true;for(var i=0;i<r.ar.length;i++)if(tx.indexOf(r.ar[i])>=0)return true;return false}
+  function frhPrefPick(items,P){var mn=P.min===""?null:+P.min,mx=P.max===""?null:+P.max,o=P.opt||{},pr=P.prof,c=[];
+    items.forEach(function(it,ix){var v=priceNum(itP(it));if(isNaN(v)||v<=0||!itN(it))return;if(mn!=null&&!isNaN(mn)&&v<mn)return;if(mx!=null&&!isNaN(mx)&&v>mx)return;
+     var tx=(itN(it)+" "+(it.desc||it.description||"")).toLowerCase(),flesh=kw("meat",tx)||kw("fish",tx);
+     if((pr==="vege"||pr==="vegan")&&flesh)return;if(pr==="pesc"&&kw("meat",tx))return;
+     if(pr==="vegan"&&(kw("egg",tx)||kw("dairy",tx)||kw("honey",tx)))return;
+     if(o.gluten&&kw("gluten",tx))return;if(o.lact&&kw("dairy",tx))return;if(o.nuts&&kw("nuts",tx))return;
+     if(o.salt&&kw("salt",tx))return;if(o.sugar&&(kw("sugar",tx)||kw("honey",tx)))return;
+     if(o.big&&!kw("big",tx))return;if(o.sweetsalt&&!kw("sweetsalt",tx))return;
+     c.push({it:it,v:v,ix:ix,flesh:flesh})});
+    if(pr==="flex"){var vg=c.filter(function(x){return !x.flesh});if(vg.length)c=vg}
+    c.sort(function(a,b){return ((b.it.top?1:0)-(a.it.top?1:0))||((b.it.pick?1:0)-(a.it.pick?1:0))||((+b.it.rating||0)-(+a.it.rating||0))||(a.ix-b.ix)});
+    return c[0]||null}
+  function frhPref(a){if(!a||!a.closest||!a.closest("#frhOut"))return;
+    var after=a.nextElementSibling&&a.nextElementSibling.classList.contains("frdish")?a.nextElementSibling:a,sp=after.nextElementSibling;if(!(sp&&sp.classList.contains("frpref")))sp=null;
+    var P=window.FRH_PREF,c=FM[nameOf(a)];
+    if(!P||!P.on||!c||!c.items||!c.items.length){if(sp)sp.remove();return}
+    var q=(typeof FRH_PT!=="undefined"&&(FRH_PT[LANG]||FRH_PT.fr))||{warn:"⚠️",none:"🧞 —"},b=frhPrefPick(c.items,P),o=P.opt||{};
+    if(!sp){sp=document.createElement("span");sp.className="frpref";sp.style.cssText="display:block;font-size:.82rem;color:#7fe3ff;margin-top:2px";after.parentNode.insertBefore(sp,after.nextSibling)}
+    var raw=b?itP(b.it):null,ps=b?((typeof raw==="string"&&/[^\d.,\s]/.test(raw))?raw.trim():b.v+" AED"):"";
+    sp.textContent=b?"🧞 "+itN(b.it)+" — "+ps:q.none;
+    if(b&&(o.gluten||o.lact||o.nuts||o.salt||o.sugar)){var w=document.createElement("span");w.style.cssText="display:block;color:#ffb347";w.textContent=q.warn;sp.appendChild(w)}}
+  window.__frhDishAll=function(){Array.prototype.forEach.call(document.querySelectorAll("#frhOut a.tmenu"),function(a){frhDish(a);frhPref(a)})};
   window.__frhMenus=function(){return FM};
   window.__frhMenuOf=function(n){return FM[n]||null};
   function qOf(a){try{return new URL(a.href).searchParams.get("q")||""}catch(e){return ""}}
